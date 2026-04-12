@@ -6,26 +6,26 @@
 
 <style>
 
-/* 🌈 GLOBAL */
+/* 🌈 BACKGROUND */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #f4f7ff, #eaf0ff, #ffffff);
   color: #111;
-  background: linear-gradient(135deg, #f5f7ff, #e8f0ff, #fdfdfd);
-  height: 100vh;
+  overflow-x: hidden;
 }
 
 /* 💎 GLASS */
 .glass {
-  background: rgba(255,255,255,0.55);
-  border: 1px solid rgba(0,0,0,0.06);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-radius: 16px;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(0,0,0,0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 18px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* 🔐 LOGIN SCREEN */
+/* 🔐 LOGIN */
 #loginScreen {
   position: fixed;
   inset: 0;
@@ -33,26 +33,28 @@ body {
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #eef3ff, #ffffff);
+  animation: fadeIn 0.6s ease;
 }
 
 #loginBox {
   width: 360px;
   padding: 40px;
   text-align: center;
+  animation: pop 0.5s ease;
 }
 
 #loginTitle {
   font-size: 28px;
   font-weight: bold;
-  margin-bottom: 8px;
 }
 
 #loginSubtitle {
   font-size: 13px;
   opacity: 0.6;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
+/* INPUTS */
 input {
   width: 100%;
   padding: 14px;
@@ -60,12 +62,19 @@ input {
   border: none;
   outline: none;
   background: rgba(0,0,0,0.05);
-  margin-bottom: 15px;
+  margin-top: 10px;
+  transition: 0.2s;
 }
 
+input:focus {
+  transform: scale(1.02);
+}
+
+/* BUTTONS */
 button {
   width: 100%;
   padding: 14px;
+  margin-top: 10px;
   border-radius: 12px;
   border: none;
   cursor: pointer;
@@ -82,6 +91,7 @@ button:hover {
 /* 🌐 APP */
 #app {
   display: none;
+  animation: fadeIn 0.5s ease;
 }
 
 /* HEADER */
@@ -90,18 +100,14 @@ header {
   text-align: center;
   font-size: 18px;
   font-weight: bold;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(15px);
-  position: sticky;
-  top: 0;
 }
 
-/* 📂 SIDEBAR */
+/* 📂 SIDEBAR (desktop) */
 .sidebar {
   position: fixed;
   left: 20px;
   top: 90px;
-  width: 180px;
+  width: 200px;
   padding: 15px;
 }
 
@@ -110,32 +116,40 @@ header {
   margin-bottom: 10px;
   border-radius: 12px;
   cursor: pointer;
-  font-size: 14px;
   transition: 0.2s;
 }
 
 .category:hover {
-  background: rgba(0,0,0,0.06);
   transform: scale(1.05);
+  background: rgba(0,0,0,0.06);
 }
 
-/* 📰 CONTAINER */
+/* 📰 MAIN */
 .container {
-  max-width: 650px;
-  margin-left: 230px;
+  max-width: 700px;
+  margin-left: 240px;
   padding: 20px;
 }
 
-/* POST BOX */
-.postBox {
-  padding: 15px;
-  margin-top: 15px;
+/* SEARCH */
+.searchBar {
+  margin-bottom: 15px;
+}
+
+.searchBar input {
+  width: 100%;
 }
 
 /* POST */
 .post {
   margin-top: 12px;
   padding: 15px;
+  animation: fadeUp 0.4s ease;
+  transition: 0.2s;
+}
+
+.post:hover {
+  transform: scale(1.01);
 }
 
 .username {
@@ -146,14 +160,53 @@ header {
 .meta {
   font-size: 11px;
   opacity: 0.5;
-  margin-top: 5px;
 }
 
-/* EMPTY */
-.empty {
-  text-align: center;
-  opacity: 0.5;
-  margin-top: 20px;
+/* 📱 MOBILE BAR */
+.mobileBar {
+  display: none;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeUp {
+  from {transform: translateY(10px); opacity: 0;}
+  to {transform: translateY(0); opacity: 1;}
+}
+
+@keyframes pop {
+  from {transform: scale(0.9); opacity: 0;}
+  to {transform: scale(1); opacity: 1;}
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 768px) {
+
+  .sidebar {
+    display: none;
+  }
+
+  .container {
+    margin-left: 0;
+    padding-bottom: 80px;
+  }
+
+  .mobileBar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    justify-content: space-around;
+    padding: 10px;
+  }
+
+  .mobileBar div {
+    font-size: 12px;
+  }
 }
 
 </style>
@@ -164,13 +217,11 @@ header {
 <!-- 🔐 LOGIN -->
 <div id="loginScreen">
   <div id="loginBox" class="glass">
-
     <div id="loginTitle">Armigé Social</div>
-    <div id="loginSubtitle">Connecte-toi pour accéder à ton réseau</div>
+    <div id="loginSubtitle">Connecte-toi</div>
 
-    <input id="loginInput" placeholder="Ton pseudo">
-    <button onclick="login()">Continuer</button>
-
+    <input id="loginInput" placeholder="Pseudo">
+    <button onclick="login()">Entrer</button>
   </div>
 </div>
 
@@ -186,15 +237,18 @@ header {
   <div class="category">📰 Actualités</div>
   <div class="category">🎮 Gaming</div>
   <div class="category">🎵 Musique</div>
-  <div class="category">🌍 Monde</div>
 </div>
 
 <!-- 📰 MAIN -->
 <div class="container">
 
+  <!-- 🔍 SEARCH -->
+  <div class="searchBar glass">
+    <input placeholder="Rechercher un utilisateur...">
+  </div>
+
   <div class="postBox glass">
     <p id="userDisplay"></p>
-
     <input id="postInput" placeholder="Exprime-toi...">
     <button onclick="addPost()">Publier</button>
   </div>
@@ -203,13 +257,22 @@ header {
 
 </div>
 
+<!-- 📱 MOBILE BAR -->
+<div class="mobileBar glass">
+  <div>🏠</div>
+  <div>🔥</div>
+  <div>➕</div>
+  <div>🔍</div>
+  <div>👤</div>
+</div>
+
 </div>
 
 <script>
 
 let user = null;
 
-/* 🔐 LOGIN */
+/* LOGIN */
 function login() {
   const input = document.getElementById("loginInput");
   if (!input.value.trim()) return;
@@ -239,7 +302,7 @@ function startApp() {
   renderPosts();
 }
 
-/* 📦 POSTS */
+/* POSTS */
 function getPosts() {
   return JSON.parse(localStorage.getItem("posts")) || [];
 }
@@ -270,11 +333,6 @@ function renderPosts() {
   feed.innerHTML = "";
 
   let posts = getPosts();
-
-  if (posts.length === 0) {
-    feed.innerHTML = "<div class='empty'>Aucun post pour le moment</div>";
-    return;
-  }
 
   posts.forEach(p => {
     const div = document.createElement("div");
