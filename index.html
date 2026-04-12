@@ -5,24 +5,23 @@
 <title>Armigé Social</title>
 
 <style>
+
 /* 🌌 BACKGROUND */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   color: white;
-  height: 100vh;
-  overflow: hidden;
   background: linear-gradient(135deg, #0f0f0f, #1a1a2e, #16213e);
+  height: 100vh;
 }
 
-/* 💧 GLASS EFFECT */
+/* 💧 GLASS */
 .glass {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
 }
 
 /* 🔐 LOGIN */
@@ -39,11 +38,6 @@ body {
   padding: 30px;
   text-align: center;
   width: 320px;
-}
-
-#loginBox h1 {
-  margin-bottom: 10px;
-  font-size: 26px;
 }
 
 input {
@@ -75,7 +69,6 @@ button:hover {
 /* 🌐 APP */
 #app {
   display: none;
-  height: 100vh;
 }
 
 /* HEADER */
@@ -88,11 +81,39 @@ header {
   backdrop-filter: blur(15px);
 }
 
-/* CONTAINER */
+/* 📦 MAIN LAYOUT */
+.main {
+  display: flex;
+}
+
+/* 📂 SIDEBAR */
+.sidebar {
+  position: fixed;
+  left: 15px;
+  top: 90px;
+  width: 180px;
+  padding: 15px;
+}
+
+.category {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.category:hover {
+  background: rgba(255,255,255,0.12);
+  transform: scale(1.05);
+}
+
+/* 📰 CONTAINER */
 .container {
   max-width: 600px;
-  margin: auto;
-  padding: 15px;
+  margin-left: 220px;
+  padding: 20px;
 }
 
 /* POST BOX */
@@ -101,7 +122,7 @@ header {
   margin-top: 15px;
 }
 
-/* FEED */
+/* POST */
 .post {
   margin-top: 12px;
   padding: 15px;
@@ -124,6 +145,7 @@ header {
   opacity: 0.5;
   margin-top: 20px;
 }
+
 </style>
 </head>
 
@@ -132,11 +154,10 @@ header {
 <!-- 🔐 LOGIN -->
 <div id="loginScreen">
   <div id="loginBox" class="glass">
-    <h1>Armigé Social</h1>
-    <p>Connexion</p>
+    <h2>Armigé Social</h2>
+    <p>Connexion requise</p>
 
     <input id="loginInput" placeholder="Ton pseudo">
-
     <button onclick="login()">Entrer</button>
   </div>
 </div>
@@ -146,6 +167,17 @@ header {
 
 <header class="glass">Armigé Social</header>
 
+<!-- 📂 SIDEBAR -->
+<div class="sidebar glass">
+  <div class="category">🏠 Accueil</div>
+  <div class="category">🔥 Tendances</div>
+  <div class="category">📰 Actualités</div>
+  <div class="category">🎮 Gaming</div>
+  <div class="category">🎵 Musique</div>
+  <div class="category">🌍 Monde</div>
+</div>
+
+<!-- 📰 MAIN -->
 <div class="container">
 
   <div class="postBox glass">
@@ -177,7 +209,7 @@ function login() {
 }
 
 /* AUTO LOGIN */
-window.onload = function() {
+window.onload = function () {
   const saved = localStorage.getItem("user");
   if (saved) {
     user = saved;
