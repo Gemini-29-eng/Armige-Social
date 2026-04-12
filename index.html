@@ -10,18 +10,17 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #f4f7ff, #eaf0ff, #ffffff);
+  background: linear-gradient(135deg, #f6f8ff, #ffffff, #eef3ff);
   color: #111;
-  overflow-x: hidden;
 }
 
 /* 💎 GLASS */
 .glass {
-  background: rgba(255,255,255,0.6);
-  border: 1px solid rgba(0,0,0,0.05);
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(0,0,0,0.06);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 18px;
+  border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
@@ -32,29 +31,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #eef3ff, #ffffff);
-  animation: fadeIn 0.6s ease;
 }
 
 #loginBox {
   width: 360px;
   padding: 40px;
   text-align: center;
-  animation: pop 0.5s ease;
 }
 
-#loginTitle {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-#loginSubtitle {
-  font-size: 13px;
-  opacity: 0.6;
-  margin-bottom: 20px;
-}
-
-/* INPUTS */
 input {
   width: 100%;
   padding: 14px;
@@ -63,14 +47,8 @@ input {
   outline: none;
   background: rgba(0,0,0,0.05);
   margin-top: 10px;
-  transition: 0.2s;
 }
 
-input:focus {
-  transform: scale(1.02);
-}
-
-/* BUTTONS */
 button {
   width: 100%;
   padding: 14px;
@@ -91,7 +69,6 @@ button:hover {
 /* 🌐 APP */
 #app {
   display: none;
-  animation: fadeIn 0.5s ease;
 }
 
 /* HEADER */
@@ -102,13 +79,21 @@ header {
   font-weight: bold;
 }
 
-/* 📂 SIDEBAR (desktop) */
+/* 📦 LAYOUT */
+.layout {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* 📂 SIDEBAR */
 .sidebar {
-  position: fixed;
-  left: 20px;
-  top: 90px;
   width: 200px;
   padding: 15px;
+  position: sticky;
+  top: 80px;
+  height: fit-content;
 }
 
 .category {
@@ -116,40 +101,24 @@ header {
   margin-bottom: 10px;
   border-radius: 12px;
   cursor: pointer;
-  transition: 0.2s;
 }
 
 .category:hover {
-  transform: scale(1.05);
   background: rgba(0,0,0,0.06);
 }
 
-/* 📰 MAIN */
-.container {
-  max-width: 700px;
-  margin-left: 240px;
-  padding: 20px;
-}
-
-/* SEARCH */
-.searchBar {
-  margin-bottom: 15px;
-}
-
-.searchBar input {
-  width: 100%;
+/* 📰 FEED */
+.feed {
+  width: 650px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 /* POST */
 .post {
-  margin-top: 12px;
   padding: 15px;
-  animation: fadeUp 0.4s ease;
-  transition: 0.2s;
-}
-
-.post:hover {
-  transform: scale(1.01);
+  animation: fadeUp 0.3s ease;
 }
 
 .username {
@@ -160,53 +129,37 @@ header {
 .meta {
   font-size: 11px;
   opacity: 0.5;
+  margin-top: 5px;
 }
 
-/* 📱 MOBILE BAR */
-.mobileBar {
-  display: none;
+/* ❤️ LIKE */
+.likeRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
 }
 
-/* ANIMATIONS */
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+.likeBtn {
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  transition: 0.2s;
 }
 
+.likeBtn:hover {
+  transform: scale(1.1);
+}
+
+.likeActive {
+  color: red;
+  transform: scale(1.2);
+}
+
+/* ANIMATION */
 @keyframes fadeUp {
-  from {transform: translateY(10px); opacity: 0;}
-  to {transform: translateY(0); opacity: 1;}
-}
-
-@keyframes pop {
-  from {transform: scale(0.9); opacity: 0;}
-  to {transform: scale(1); opacity: 1;}
-}
-
-/* 📱 RESPONSIVE */
-@media (max-width: 768px) {
-
-  .sidebar {
-    display: none;
-  }
-
-  .container {
-    margin-left: 0;
-    padding-bottom: 80px;
-  }
-
-  .mobileBar {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    justify-content: space-around;
-    padding: 10px;
-  }
-
-  .mobileBar div {
-    font-size: 12px;
-  }
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
 }
 
 </style>
@@ -217,9 +170,7 @@ header {
 <!-- 🔐 LOGIN -->
 <div id="loginScreen">
   <div id="loginBox" class="glass">
-    <div id="loginTitle">Armigé Social</div>
-    <div id="loginSubtitle">Connecte-toi</div>
-
+    <h2>Armigé Social</h2>
     <input id="loginInput" placeholder="Pseudo">
     <button onclick="login()">Entrer</button>
   </div>
@@ -230,40 +181,30 @@ header {
 
 <header class="glass">Armigé Social</header>
 
-<!-- 📂 SIDEBAR -->
-<div class="sidebar glass">
-  <div class="category">🏠 Accueil</div>
-  <div class="category">🔥 Tendances</div>
-  <div class="category">📰 Actualités</div>
-  <div class="category">🎮 Gaming</div>
-  <div class="category">🎵 Musique</div>
-</div>
+<div class="layout">
 
-<!-- 📰 MAIN -->
-<div class="container">
-
-  <!-- 🔍 SEARCH -->
-  <div class="searchBar glass">
-    <input placeholder="Rechercher un utilisateur...">
+  <!-- 📂 SIDEBAR -->
+  <div class="sidebar glass">
+    <div class="category">🏠 Accueil</div>
+    <div class="category">🔥 Tendances</div>
+    <div class="category">📰 Actualités</div>
+    <div class="category">🎮 Gaming</div>
+    <div class="category">🎵 Musique</div>
   </div>
 
-  <div class="postBox glass">
-    <p id="userDisplay"></p>
-    <input id="postInput" placeholder="Exprime-toi...">
-    <button onclick="addPost()">Publier</button>
+  <!-- 📰 FEED -->
+  <div class="feed">
+
+    <div class="postBox glass">
+      <p id="userDisplay"></p>
+      <input id="postInput" placeholder="Exprime-toi...">
+      <button onclick="addPost()">Publier</button>
+    </div>
+
+    <div id="feed"></div>
+
   </div>
 
-  <div id="feed"></div>
-
-</div>
-
-<!-- 📱 MOBILE BAR -->
-<div class="mobileBar glass">
-  <div>🏠</div>
-  <div>🔥</div>
-  <div>➕</div>
-  <div>🔍</div>
-  <div>👤</div>
 </div>
 
 </div>
@@ -318,9 +259,12 @@ function addPost() {
   let posts = getPosts();
 
   posts.unshift({
+    id: Date.now(),
     user: user,
     text: input.value.trim(),
-    time: new Date().toLocaleString()
+    time: new Date().toLocaleString(),
+    likes: 0,
+    likedBy: []
   });
 
   savePosts(posts);
@@ -328,6 +272,29 @@ function addPost() {
   renderPosts();
 }
 
+/* ❤️ LIKE */
+function toggleLike(id) {
+  let posts = getPosts();
+
+  posts = posts.map(p => {
+    if (p.id === id) {
+
+      if (!p.likedBy.includes(user)) {
+        p.likes += 1;
+        p.likedBy.push(user);
+      } else {
+        p.likes -= 1;
+        p.likedBy = p.likedBy.filter(u => u !== user);
+      }
+    }
+    return p;
+  });
+
+  savePosts(posts);
+  renderPosts();
+}
+
+/* RENDER */
 function renderPosts() {
   const feed = document.getElementById("feed");
   feed.innerHTML = "";
@@ -335,13 +302,24 @@ function renderPosts() {
   let posts = getPosts();
 
   posts.forEach(p => {
+
+    const isLiked = p.likedBy.includes(user);
+
     const div = document.createElement("div");
     div.className = "post glass";
 
     div.innerHTML = `
       <div class="username">${p.user}</div>
       <div>${p.text}</div>
-      <div class="meta">${p.time}</div>
+
+      <div class="likeRow">
+        <div class="meta">${p.time}</div>
+
+        <div class="likeBtn ${isLiked ? "likeActive" : ""}"
+             onclick="toggleLike(${p.id})">
+          ❤️ ${p.likes}
+        </div>
+      </div>
     `;
 
     feed.appendChild(div);
