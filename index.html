@@ -1,7 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Armigé Social</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f0f0f;
+      color: white;
+      text-align: center;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px;
+    }
+
+    .post {
+      background: #1e1e1e;
+      margin: 10px auto;
+      padding: 10px;
+      width: 300px;
+      border-radius: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Armigé Social</h1>
+
+<input id="postInput" placeholder="Exprime-toi...">
+<button onclick="addPost()">Publier</button>
+
+<div id="feed"></div>
+
+<script>
 function getPosts() {
   try {
     return JSON.parse(localStorage.getItem("posts")) || [];
-  } catch (e) {
+  } catch {
     return [];
   }
 }
@@ -12,15 +52,14 @@ function savePosts(posts) {
 
 function addPost() {
   const input = document.getElementById("postInput");
-  const text = input.value.trim();
 
-  if (!text) return;
+  if (!input || !input.value.trim()) return;
 
   let posts = getPosts();
 
   posts.unshift({
     user: "Invité",
-    text: text,
+    text: input.value.trim(),
     time: new Date().toLocaleString()
   });
 
@@ -32,6 +71,8 @@ function addPost() {
 
 function renderPosts() {
   const feed = document.getElementById("feed");
+  if (!feed) return;
+
   feed.innerHTML = "";
 
   let posts = getPosts();
@@ -41,8 +82,8 @@ function renderPosts() {
     div.className = "post";
 
     div.innerHTML = `
-      <strong>${post.user}</strong>
-      <p>${post.text}</p>
+      <strong>${post.user}</strong><br>
+      ${post.text}<br>
       <small>${post.time}</small>
     `;
 
@@ -51,3 +92,7 @@ function renderPosts() {
 }
 
 window.onload = renderPosts;
+</script>
+
+</body>
+</html>
