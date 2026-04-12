@@ -7,17 +7,54 @@
 <style>
   body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background: #0f0f0f;
     color: white;
   }
 
+  /* LOGIN SCREEN */
+  #loginScreen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0f0f0f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #loginBox {
+    background: #1a1a1a;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  input {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    border: none;
+    width: 200px;
+  }
+
+  button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #4a90e2;
+    color: white;
+  }
+
+  /* APP */
   header {
     padding: 20px;
     background: #1a1a1a;
     text-align: center;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 22px;
   }
 
   .container {
@@ -33,35 +70,11 @@
     margin-bottom: 15px;
   }
 
-  input {
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    width: 70%;
-    margin-right: 5px;
-  }
-
-  button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #4a90e2;
-    color: white;
-  }
-
   .post {
     background: #1e1e1e;
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 10px;
-    text-align: left;
-  }
-
-  .meta {
-    font-size: 12px;
-    color: gray;
-    margin-top: 5px;
   }
 
   .username {
@@ -69,8 +82,8 @@
     font-weight: bold;
   }
 
-  .empty {
-    text-align: center;
+  .meta {
+    font-size: 12px;
     color: gray;
   }
 </style>
@@ -78,53 +91,80 @@
 
 <body>
 
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div id="loginBox">
+    <h2>Armigé Social</h2>
+    <p>Connexion requise</p>
+    <input id="loginInput" placeholder="Ton pseudo">
+    <br>
+    <button onclick="login()">Entrer</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+
 <header>Armigé Social</header>
 
 <div class="container">
 
-  <!-- PROFIL -->
   <div class="panel">
-    <input id="usernameInput" placeholder="Ton pseudo">
-    <button onclick="saveUser()">Créer profil</button>
-    <p id="currentUser" style="color:gray;margin-top:10px;"></p>
+    <p id="currentUser"></p>
   </div>
 
-  <!-- POST -->
   <div class="panel">
-    <input id="postInput" placeholder="Exprime-toi sur Armigé Social...">
+    <input id="postInput" placeholder="Exprime-toi...">
     <button onclick="addPost()">Publier</button>
   </div>
 
-  <!-- FEED -->
   <div id="feed"></div>
 
 </div>
 
-<script>
-function getUser() {
-  return localStorage.getItem("user") || "Invité";
-}
+</div>
 
-function saveUser() {
-  const input = document.getElementById("usernameInput");
+<script>
+let user = null;
+
+/* LOGIN */
+function login() {
+  const input = document.getElementById("loginInput");
 
   if (!input.value.trim()) return;
 
-  localStorage.setItem("user", input.value.trim());
-  renderUser();
+  user = input.value.trim();
+  localStorage.setItem("user", user);
+
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("app").style.display = "block";
+
+  document.getElementById("currentUser").textContent =
+    "Connecté en tant que : " + user;
+
+  renderPosts();
 }
 
-function renderUser() {
-  const display = document.getElementById("currentUser");
-  display.textContent = "Connecté en tant que : " + getUser();
-}
+/* AUTO LOGIN */
+window.onload = function () {
+  const savedUser = localStorage.getItem("user");
 
-function getPosts() {
-  try {
-    return JSON.parse(localStorage.getItem("posts")) || [];
-  } catch {
-    return [];
+  if (savedUser) {
+    user = savedUser;
+
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("app").style.display = "block";
+
+    document.getElementById("currentUser").textContent =
+      "Connecté en tant que : " + user;
+
+    renderPosts();
   }
+};
+
+/* POSTS */
+function getPosts() {
+  return JSON.parse(localStorage.getItem("posts")) || [];
 }
 
 function savePosts(posts) {
@@ -139,7 +179,7 @@ function addPost() {
   let posts = getPosts();
 
   posts.unshift({
-    user: getUser(),
+    user: user,
     text: input.value.trim(),
     time: new Date().toLocaleString()
   });
@@ -156,11 +196,6 @@ function renderPosts() {
 
   let posts = getPosts();
 
-  if (posts.length === 0) {
-    feed.innerHTML = "<p class='empty'>Aucun message pour le moment</p>";
-    return;
-  }
-
   posts.forEach(post => {
     const div = document.createElement("div");
     div.className = "post";
@@ -174,11 +209,6 @@ function renderPosts() {
     feed.appendChild(div);
   });
 }
-
-window.onload = function() {
-  renderUser();
-  renderPosts();
-};
 </script>
 
 </body>
