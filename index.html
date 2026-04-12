@@ -7,7 +7,7 @@
 <style>
   body {
     margin: 0;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     background: #0f0f0f;
     color: white;
   }
@@ -26,17 +26,19 @@
     padding: 20px;
   }
 
-  .box {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+  .panel {
+    background: #161616;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
   }
 
   input {
-    flex: 1;
     padding: 10px;
     border-radius: 8px;
     border: none;
+    width: 70%;
+    margin-right: 5px;
   }
 
   button {
@@ -53,12 +55,23 @@
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 10px;
+    text-align: left;
   }
 
   .meta {
     font-size: 12px;
     color: gray;
     margin-top: 5px;
+  }
+
+  .username {
+    color: #4a90e2;
+    font-weight: bold;
+  }
+
+  .empty {
+    text-align: center;
+    color: gray;
   }
 </style>
 </head>
@@ -69,16 +82,43 @@
 
 <div class="container">
 
-  <div class="box">
+  <!-- PROFIL -->
+  <div class="panel">
+    <input id="usernameInput" placeholder="Ton pseudo">
+    <button onclick="saveUser()">Créer profil</button>
+    <p id="currentUser" style="color:gray;margin-top:10px;"></p>
+  </div>
+
+  <!-- POST -->
+  <div class="panel">
     <input id="postInput" placeholder="Exprime-toi sur Armigé Social...">
     <button onclick="addPost()">Publier</button>
   </div>
 
+  <!-- FEED -->
   <div id="feed"></div>
 
 </div>
 
 <script>
+function getUser() {
+  return localStorage.getItem("user") || "Invité";
+}
+
+function saveUser() {
+  const input = document.getElementById("usernameInput");
+
+  if (!input.value.trim()) return;
+
+  localStorage.setItem("user", input.value.trim());
+  renderUser();
+}
+
+function renderUser() {
+  const display = document.getElementById("currentUser");
+  display.textContent = "Connecté en tant que : " + getUser();
+}
+
 function getPosts() {
   try {
     return JSON.parse(localStorage.getItem("posts")) || [];
@@ -99,7 +139,7 @@ function addPost() {
   let posts = getPosts();
 
   posts.unshift({
-    user: "Invité",
+    user: getUser(),
     text: input.value.trim(),
     time: new Date().toLocaleString()
   });
@@ -117,7 +157,7 @@ function renderPosts() {
   let posts = getPosts();
 
   if (posts.length === 0) {
-    feed.innerHTML = "<p style='color:gray;text-align:center'>Aucun message pour le moment</p>";
+    feed.innerHTML = "<p class='empty'>Aucun message pour le moment</p>";
     return;
   }
 
@@ -126,8 +166,8 @@ function renderPosts() {
     div.className = "post";
 
     div.innerHTML = `
-      <strong>${post.user}</strong>
-      <p>${post.text}</p>
+      <div class="username">${post.user}</div>
+      <div>${post.text}</div>
       <div class="meta">${post.time}</div>
     `;
 
@@ -135,7 +175,10 @@ function renderPosts() {
   });
 }
 
-window.onload = renderPosts;
+window.onload = function() {
+  renderUser();
+  renderPosts();
+};
 </script>
 
 </body>
