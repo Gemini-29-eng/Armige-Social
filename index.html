@@ -5,328 +5,181 @@
 <title>Armigé Social</title>
 
 <style>
-
-/* 🌈 BACKGROUND */
-body {
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #f6f8ff, #ffffff, #eef3ff);
-  color: #111;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
 }
 
-/* 💎 GLASS */
-.glass {
-  background: rgba(255,255,255,0.7);
-  border: 1px solid rgba(0,0,0,0.06);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+body {
+  background: #f6f4ff;
 }
 
-/* 🔐 LOGIN */
-#loginScreen {
-  position: fixed;
-  inset: 0;
+/* APP */
+.app {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100vh;
 }
 
-#loginBox {
-  width: 360px;
-  padding: 40px;
-  text-align: center;
-}
-
-input {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  outline: none;
-  background: rgba(0,0,0,0.05);
-  margin-top: 10px;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 10px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  background: #111;
-  color: white;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-button:hover {
-  transform: scale(1.03);
-}
-
-/* 🌐 APP */
-#app {
-  display: none;
-}
-
-/* HEADER */
-header {
-  padding: 18px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* 📦 LAYOUT */
-.layout {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-}
-
-/* 📂 SIDEBAR */
+/* SIDEBAR */
 .sidebar {
-  width: 200px;
-  padding: 15px;
-  position: sticky;
-  top: 80px;
-  height: fit-content;
-}
-
-.category {
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.category:hover {
-  background: rgba(0,0,0,0.06);
-}
-
-/* 📰 FEED */
-.feed {
-  width: 650px;
+  width: 240px;
+  background: #ffffff;
+  border-right: 1px solid #e7e3ff;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #7c5cff; /* violet lavande */
+  margin-bottom: 20px;
+}
+
+/* NAV BUTTONS */
+.nav-btn {
+  background: transparent;
+  border: none;
+  padding: 12px;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: 0.2s;
+  color: #333;
+}
+
+.nav-btn:hover {
+  background: #f0ecff;
+  transform: translateX(3px);
+}
+
+.nav-btn.active {
+  background: #7c5cff;
+  color: white;
+}
+
+/* CONTENT */
+.content {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+}
+
+/* POST BOX */
+.post-box {
+  background: white;
+  padding: 15px;
+  border-radius: 14px;
+  border: 1px solid #e7e3ff;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 15px rgba(124,92,255,0.08);
+}
+
+.post-box input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
 }
 
 /* POST */
 .post {
+  background: white;
   padding: 15px;
-  animation: fadeUp 0.3s ease;
+  border-radius: 14px;
+  border: 1px solid #e7e3ff;
+  margin-bottom: 15px;
+  transition: 0.2s;
+  box-shadow: 0 5px 15px rgba(124,92,255,0.05);
 }
 
-.username {
-  color: #2b6cff;
+.post:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(124,92,255,0.12);
+}
+
+.user {
   font-weight: bold;
+  color: #7c5cff;
+  margin-bottom: 5px;
 }
 
-.meta {
-  font-size: 11px;
-  opacity: 0.5;
-  margin-top: 5px;
+.text {
+  color: #333;
 }
 
-/* ❤️ LIKE */
-.likeRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.actions {
   margin-top: 10px;
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+  color: #666;
 }
 
-.likeBtn {
+.actions span {
   cursor: pointer;
-  user-select: none;
-  font-size: 14px;
   transition: 0.2s;
 }
 
-.likeBtn:hover {
-  transform: scale(1.1);
+.actions span:hover {
+  color: #7c5cff;
 }
-
-.likeActive {
-  color: red;
-  transform: scale(1.2);
-}
-
-/* ANIMATION */
-@keyframes fadeUp {
-  from {opacity: 0; transform: translateY(10px);}
-  to {opacity: 1; transform: translateY(0);}
-}
-
 </style>
+
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN -->
-<div id="loginScreen">
-  <div id="loginBox" class="glass">
-    <h2>Armigé Social</h2>
-    <input id="loginInput" placeholder="Pseudo">
-    <button onclick="login()">Entrer</button>
-  </div>
-</div>
+<div class="app">
 
-<!-- 🌐 APP -->
-<div id="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">Armigé</div>
 
-<header class="glass">Armigé Social</header>
-
-<div class="layout">
-
-  <!-- 📂 SIDEBAR -->
-  <div class="sidebar glass">
-    <div class="category">🏠 Accueil</div>
-    <div class="category">🔥 Tendances</div>
-    <div class="category">📰 Actualités</div>
-    <div class="category">🎮 Gaming</div>
-    <div class="category">🎵 Musique</div>
+    <button class="nav-btn active">🏠 Accueil</button>
+    <button class="nav-btn">🔎 Explorer</button>
+    <button class="nav-btn">💬 Messages</button>
+    <button class="nav-btn">👤 Profil</button>
   </div>
 
-  <!-- 📰 FEED -->
-  <div class="feed">
+  <!-- CONTENT -->
+  <div class="content">
 
-    <div class="postBox glass">
-      <p id="userDisplay"></p>
-      <input id="postInput" placeholder="Exprime-toi...">
-      <button onclick="addPost()">Publier</button>
+    <!-- POST INPUT -->
+    <div class="post-box">
+      <input type="text" placeholder="Exprime-toi..." />
     </div>
 
-    <div id="feed"></div>
+    <!-- POSTS -->
+    <div class="post">
+      <div class="user">Armigé System</div>
+      <div class="text">Bienvenue sur Armigé Social 💜</div>
+      <div class="actions">
+        <span>❤️ Like</span>
+        <span>💬 Comment</span>
+        <span>🔁 Share</span>
+      </div>
+    </div>
+
+    <div class="post">
+      <div class="user">Utilisateur</div>
+      <div class="text">Test du nouveau design lavande ✨</div>
+      <div class="actions">
+        <span>❤️ Like</span>
+        <span>💬 Comment</span>
+        <span>🔁 Share</span>
+      </div>
+    </div>
 
   </div>
 
 </div>
-
-</div>
-
-<script>
-
-let user = null;
-
-/* LOGIN */
-function login() {
-  const input = document.getElementById("loginInput");
-  if (!input.value.trim()) return;
-
-  user = input.value.trim();
-  localStorage.setItem("user", user);
-
-  startApp();
-}
-
-/* AUTO LOGIN */
-window.onload = function () {
-  const saved = localStorage.getItem("user");
-  if (saved) {
-    user = saved;
-    startApp();
-  }
-};
-
-function startApp() {
-  document.getElementById("loginScreen").style.display = "none";
-  document.getElementById("app").style.display = "block";
-
-  document.getElementById("userDisplay").textContent =
-    "Connecté : " + user;
-
-  renderPosts();
-}
-
-/* POSTS */
-function getPosts() {
-  return JSON.parse(localStorage.getItem("posts")) || [];
-}
-
-function savePosts(posts) {
-  localStorage.setItem("posts", JSON.stringify(posts));
-}
-
-function addPost() {
-  const input = document.getElementById("postInput");
-  if (!input.value.trim()) return;
-
-  let posts = getPosts();
-
-  posts.unshift({
-    id: Date.now(),
-    user: user,
-    text: input.value.trim(),
-    time: new Date().toLocaleString(),
-    likes: 0,
-    likedBy: []
-  });
-
-  savePosts(posts);
-  input.value = "";
-  renderPosts();
-}
-
-/* ❤️ LIKE */
-function toggleLike(id) {
-  let posts = getPosts();
-
-  posts = posts.map(p => {
-    if (p.id === id) {
-
-      if (!p.likedBy.includes(user)) {
-        p.likes += 1;
-        p.likedBy.push(user);
-      } else {
-        p.likes -= 1;
-        p.likedBy = p.likedBy.filter(u => u !== user);
-      }
-    }
-    return p;
-  });
-
-  savePosts(posts);
-  renderPosts();
-}
-
-/* RENDER */
-function renderPosts() {
-  const feed = document.getElementById("feed");
-  feed.innerHTML = "";
-
-  let posts = getPosts();
-
-  posts.forEach(p => {
-
-    const isLiked = p.likedBy.includes(user);
-
-    const div = document.createElement("div");
-    div.className = "post glass";
-
-    div.innerHTML = `
-      <div class="username">${p.user}</div>
-      <div>${p.text}</div>
-
-      <div class="likeRow">
-        <div class="meta">${p.time}</div>
-
-        <div class="likeBtn ${isLiked ? "likeActive" : ""}"
-             onclick="toggleLike(${p.id})">
-          ❤️ ${p.likes}
-        </div>
-      </div>
-    `;
-
-    feed.appendChild(div);
-  });
-}
-
-</script>
 
 </body>
 </html>
