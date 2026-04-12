@@ -5,115 +5,152 @@
 <title>Armigé Social</title>
 
 <style>
-  body {
-    margin: 0;
-    font-family: Arial;
-    background: #0f0f0f;
-    color: white;
-  }
+/* 🌌 BACKGROUND */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a2e, #16213e);
+}
 
-  /* LOGIN SCREEN */
-  #loginScreen {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background: #0f0f0f;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+/* 💧 GLASS EFFECT */
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
 
-  #loginBox {
-    background: #1a1a1a;
-    padding: 30px;
-    border-radius: 12px;
-    text-align: center;
-  }
+/* 🔐 LOGIN */
+#loginScreen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  input {
-    padding: 10px;
-    margin: 10px;
-    border-radius: 8px;
-    border: none;
-    width: 200px;
-  }
+#loginBox {
+  padding: 30px;
+  text-align: center;
+  width: 320px;
+}
 
-  button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #4a90e2;
-    color: white;
-  }
+#loginBox h1 {
+  margin-bottom: 10px;
+  font-size: 26px;
+}
 
-  /* APP */
-  header {
-    padding: 20px;
-    background: #1a1a1a;
-    text-align: center;
-    font-size: 22px;
-  }
+input {
+  width: 90%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
 
-  .container {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-  }
+button {
+  margin-top: 15px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: rgba(74,144,226,0.8);
+  color: white;
+  transition: 0.2s;
+}
 
-  .panel {
-    background: #161616;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-  }
+button:hover {
+  transform: scale(1.05);
+}
 
-  .post {
-    background: #1e1e1e;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-  }
+/* 🌐 APP */
+#app {
+  display: none;
+  height: 100vh;
+}
 
-  .username {
-    color: #4a90e2;
-    font-weight: bold;
-  }
+/* HEADER */
+header {
+  padding: 18px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(15px);
+}
 
-  .meta {
-    font-size: 12px;
-    color: gray;
-  }
+/* CONTAINER */
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 15px;
+}
+
+/* POST BOX */
+.postBox {
+  padding: 15px;
+  margin-top: 15px;
+}
+
+/* FEED */
+.post {
+  margin-top: 12px;
+  padding: 15px;
+}
+
+.username {
+  color: #4da3ff;
+  font-weight: bold;
+}
+
+.meta {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-top: 5px;
+}
+
+/* EMPTY */
+.empty {
+  text-align: center;
+  opacity: 0.5;
+  margin-top: 20px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- 🔐 LOGIN -->
 <div id="loginScreen">
-  <div id="loginBox">
-    <h2>Armigé Social</h2>
-    <p>Connexion requise</p>
+  <div id="loginBox" class="glass">
+    <h1>Armigé Social</h1>
+    <p>Connexion</p>
+
     <input id="loginInput" placeholder="Ton pseudo">
-    <br>
+
     <button onclick="login()">Entrer</button>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app" style="display:none;">
+<!-- 🌐 APP -->
+<div id="app">
 
-<header>Armigé Social</header>
+<header class="glass">Armigé Social</header>
 
 <div class="container">
 
-  <div class="panel">
-    <p id="currentUser"></p>
-  </div>
+  <div class="postBox glass">
+    <p id="userDisplay"></p>
 
-  <div class="panel">
     <input id="postInput" placeholder="Exprime-toi...">
     <button onclick="addPost()">Publier</button>
   </div>
@@ -125,44 +162,40 @@
 </div>
 
 <script>
+
 let user = null;
 
-/* LOGIN */
+/* 🔐 LOGIN */
 function login() {
   const input = document.getElementById("loginInput");
-
   if (!input.value.trim()) return;
 
   user = input.value.trim();
   localStorage.setItem("user", user);
 
+  startApp();
+}
+
+/* AUTO LOGIN */
+window.onload = function() {
+  const saved = localStorage.getItem("user");
+  if (saved) {
+    user = saved;
+    startApp();
+  }
+};
+
+function startApp() {
   document.getElementById("loginScreen").style.display = "none";
   document.getElementById("app").style.display = "block";
 
-  document.getElementById("currentUser").textContent =
-    "Connecté en tant que : " + user;
+  document.getElementById("userDisplay").textContent =
+    "Connecté : " + user;
 
   renderPosts();
 }
 
-/* AUTO LOGIN */
-window.onload = function () {
-  const savedUser = localStorage.getItem("user");
-
-  if (savedUser) {
-    user = savedUser;
-
-    document.getElementById("loginScreen").style.display = "none";
-    document.getElementById("app").style.display = "block";
-
-    document.getElementById("currentUser").textContent =
-      "Connecté en tant que : " + user;
-
-    renderPosts();
-  }
-};
-
-/* POSTS */
+/* 📦 POSTS */
 function getPosts() {
   return JSON.parse(localStorage.getItem("posts")) || [];
 }
@@ -173,7 +206,6 @@ function savePosts(posts) {
 
 function addPost() {
   const input = document.getElementById("postInput");
-
   if (!input.value.trim()) return;
 
   let posts = getPosts();
@@ -185,7 +217,6 @@ function addPost() {
   });
 
   savePosts(posts);
-
   input.value = "";
   renderPosts();
 }
@@ -196,19 +227,25 @@ function renderPosts() {
 
   let posts = getPosts();
 
-  posts.forEach(post => {
+  if (posts.length === 0) {
+    feed.innerHTML = "<div class='empty'>Aucun post pour le moment</div>";
+    return;
+  }
+
+  posts.forEach(p => {
     const div = document.createElement("div");
-    div.className = "post";
+    div.className = "post glass";
 
     div.innerHTML = `
-      <div class="username">${post.user}</div>
-      <div>${post.text}</div>
-      <div class="meta">${post.time}</div>
+      <div class="username">${p.user}</div>
+      <div>${p.text}</div>
+      <div class="meta">${p.time}</div>
     `;
 
     feed.appendChild(div);
   });
 }
+
 </script>
 
 </body>
