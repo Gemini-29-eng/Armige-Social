@@ -1,17 +1,30 @@
+function getPosts() {
+  try {
+    return JSON.parse(localStorage.getItem("posts")) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function savePosts(posts) {
+  localStorage.setItem("posts", JSON.stringify(posts));
+}
+
 function addPost() {
   const input = document.getElementById("postInput");
-  const text = input.value;
+  const text = input.value.trim();
 
   if (!text) return;
 
-  let posts = JSON.parse(localStorage.getItem("posts")) || [];
+  let posts = getPosts();
 
   posts.unshift({
+    user: "Invité",
     text: text,
     time: new Date().toLocaleString()
   });
 
-  localStorage.setItem("posts", JSON.stringify(posts));
+  savePosts(posts);
 
   input.value = "";
   renderPosts();
@@ -21,15 +34,18 @@ function renderPosts() {
   const feed = document.getElementById("feed");
   feed.innerHTML = "";
 
-  let posts = JSON.parse(localStorage.getItem("posts")) || [];
+  let posts = getPosts();
 
   posts.forEach(post => {
     const div = document.createElement("div");
     div.className = "post";
+
     div.innerHTML = `
+      <strong>${post.user}</strong>
       <p>${post.text}</p>
       <small>${post.time}</small>
     `;
+
     feed.appendChild(div);
   });
 }
