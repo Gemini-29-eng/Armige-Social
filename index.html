@@ -12,75 +12,20 @@
   font-family: Arial;
 }
 
-/* BACKGROUND LOGIN */
 body {
   background: #f6f4ff;
 }
 
-/* LOGIN SCREEN */
-#auth {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.auth-box {
-  background: white;
-  padding: 30px;
-  border-radius: 16px;
-  width: 320px;
-  box-shadow: 0 10px 30px rgba(124,92,255,0.15);
-  text-align: center;
-}
-
-.auth-box h1 {
-  color: #7c5cff;
-  margin-bottom: 20px;
-}
-
-.auth-box input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  outline: none;
-}
-
-.auth-box button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #7c5cff;
-  color: white;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: 0.2s;
-}
-
-.auth-box button:hover {
-  background: #6846ff;
-}
-
-.switch {
-  margin-top: 10px;
-  font-size: 13px;
-  color: #666;
-  cursor: pointer;
-}
-
 /* APP */
 .app {
-  display: none;
+  display: flex;
   height: 100vh;
 }
 
 /* SIDEBAR */
 .sidebar {
   width: 240px;
-  background: #ffffff;
+  background: white;
   border-right: 1px solid #e7e3ff;
   padding: 20px;
   display: flex;
@@ -88,11 +33,24 @@ body {
   gap: 10px;
 }
 
+/* LOGO */
 .logo {
   font-size: 22px;
   font-weight: bold;
   color: #7c5cff;
   margin-bottom: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* EFFET LOGO */
+.logo:hover {
+  transform: scale(1.05);
+  text-shadow: 0 5px 15px rgba(124,92,255,0.4);
+}
+
+.logo:active {
+  transform: scale(0.95);
 }
 
 /* NAV */
@@ -101,21 +59,20 @@ body {
   border: none;
   padding: 12px;
   text-align: left;
-  font-size: 15px;
-  cursor: pointer;
   border-radius: 12px;
-  transition: 0.2s;
-  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .nav-btn:hover {
   background: #f0ecff;
-  transform: translateX(3px);
+  transform: translateX(5px);
 }
 
 .nav-btn.active {
   background: #7c5cff;
   color: white;
+  box-shadow: 0 5px 15px rgba(124,92,255,0.3);
 }
 
 /* CONTENT */
@@ -125,27 +82,48 @@ body {
   overflow-y: auto;
 }
 
-/* POST */
-.post {
+/* ANIMATION */
+.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: 0.2s;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* CARD */
+.card {
   background: white;
-  padding: 15px;
+  padding: 20px;
   border-radius: 14px;
   border: 1px solid #e7e3ff;
   margin-bottom: 15px;
-  box-shadow: 0 5px 15px rgba(124,92,255,0.05);
+  animation: fadeIn 0.4s ease;
+  transition: 0.2s;
 }
 
-.user {
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(124,92,255,0.15);
+}
+
+.title {
   font-weight: bold;
   color: #7c5cff;
-}
-
-.actions {
-  margin-top: 10px;
-  display: flex;
-  gap: 15px;
-  font-size: 14px;
-  color: #666;
+  margin-bottom: 10px;
 }
 </style>
 
@@ -153,50 +131,31 @@ body {
 
 <body>
 
-<!-- LOGIN -->
-<div id="auth">
+<div class="app">
 
-  <div class="auth-box" id="loginBox">
-    <h1>Armigé</h1>
-    <input id="loginUser" placeholder="Pseudo">
-    <input id="loginPass" type="password" placeholder="Mot de passe">
-    <button onclick="login()">Se connecter</button>
-    <div class="switch" onclick="toggleAuth()">Créer un compte</div>
-  </div>
-
-  <div class="auth-box" id="registerBox" style="display:none;">
-    <h1>Créer compte</h1>
-    <input id="regUser" placeholder="Pseudo">
-    <input id="regPass" type="password" placeholder="Mot de passe">
-    <button onclick="register()">Créer le compte</button>
-    <div class="switch" onclick="toggleAuth()">Déjà un compte ?</div>
-  </div>
-
-</div>
-
-<!-- APP -->
-<div class="app" id="app">
-
+  <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="logo">Armigé</div>
+    <div class="logo" onclick="goHome()">Armigé</div>
 
-    <button class="nav-btn active" data-page="home">🏠 Accueil</button>
-    <button class="nav-btn" data-page="explore">🔎 Explorer</button>
-    <button class="nav-btn" data-page="messages">💬 Messages</button>
-    <button class="nav-btn" data-page="profile">👤 Profil</button>
-    <button class="nav-btn" onclick="logout()">🚪 Déconnexion</button>
+    <button class="nav-btn active" data-page="home">Accueil</button>
+    <button class="nav-btn" data-page="explore">Explorer</button>
+    <button class="nav-btn" data-page="messages">Messages</button>
+    <button class="nav-btn" data-page="profile">Profil</button>
+
+    <hr>
+
+    <button class="nav-btn" data-page="actualites">Actualités</button>
+    <button class="nav-btn" data-page="culture">Culture</button>
+    <button class="nav-btn" data-page="divertissement">Divertissement</button>
+    <button class="nav-btn" data-page="apps">Autres Apps</button>
   </div>
 
+  <!-- CONTENT -->
   <div class="content" id="content">
 
-    <div class="post">
-      <div class="user">Armigé System</div>
-      <div>Bienvenue 💜</div>
-      <div class="actions">
-        <span>❤️ Like</span>
-        <span>💬 Comment</span>
-        <span>🔁 Share</span>
-      </div>
+    <div class="card">
+      <div class="title">Accueil</div>
+      <div>Bienvenue sur Armigé.</div>
     </div>
 
   </div>
@@ -204,53 +163,67 @@ body {
 </div>
 
 <script>
-let users = JSON.parse(localStorage.getItem("armige_users") || "[]");
-let currentUser = null;
 
-/* SWITCH LOGIN / REGISTER */
-function toggleAuth() {
-  document.getElementById("loginBox").style.display =
-    document.getElementById("loginBox").style.display === "none" ? "block" : "none";
+const buttons = document.querySelectorAll(".nav-btn");
+const content = document.getElementById("content");
 
-  document.getElementById("registerBox").style.display =
-    document.getElementById("registerBox").style.display === "none" ? "block" : "none";
+/* PAGES */
+const pages = {
+  home: "Accueil",
+  explore: "Explorer",
+  messages: "Messages",
+  profile: "Profil",
+  actualites: "Actualités",
+  culture: "Culture",
+  divertissement: "Divertissement",
+  apps: "Autres Apps"
+};
+
+/* NAVIGATION */
+buttons.forEach(btn => {
+  btn.addEventListener("click", () => {
+
+    buttons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    loadPage(btn.dataset.page);
+  });
+});
+
+/* LOAD PAGE AVEC ANIMATION */
+function loadPage(page) {
+
+  content.classList.add("fade-out");
+
+  setTimeout(() => {
+
+    content.innerHTML = `
+      <div class="card">
+        <div class="title">${pages[page]}</div>
+        <div>Contenu de la page ${page}</div>
+      </div>
+    `;
+
+    content.classList.remove("fade-out");
+    content.classList.add("fade-in");
+
+    setTimeout(() => {
+      content.classList.remove("fade-in");
+    }, 300);
+
+  }, 200);
 }
 
-/* REGISTER */
-function register() {
-  const u = document.getElementById("regUser").value;
-  const p = document.getElementById("regPass").value;
+/* LOGO = HOME */
+function goHome() {
 
-  if (!u || !p) return alert("Remplis tout");
+  /* reset bouton actif */
+  buttons.forEach(b => b.classList.remove("active"));
+  document.querySelector('[data-page="home"]').classList.add("active");
 
-  users.push({ user: u, pass: p });
-  localStorage.setItem("armige_users", JSON.stringify(users));
-
-  alert("Compte créé !");
-  toggleAuth();
+  loadPage("home");
 }
 
-/* LOGIN */
-function login() {
-  const u = document.getElementById("loginUser").value;
-  const p = document.getElementById("loginPass").value;
-
-  const found = users.find(x => x.user === u && x.pass === p);
-
-  if (!found) return alert("Erreur connexion");
-
-  currentUser = found;
-
-  document.getElementById("auth").style.display = "none";
-  document.getElementById("app").style.display = "flex";
-}
-
-/* LOGOUT */
-function logout() {
-  currentUser = null;
-  document.getElementById("auth").style.display = "flex";
-  document.getElementById("app").style.display = "none";
-}
 </script>
 
 </body>
