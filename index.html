@@ -33,7 +33,6 @@ body {
   gap: 10px;
 }
 
-/* LOGO */
 .logo {
   font-size: 22px;
   font-weight: bold;
@@ -48,10 +47,6 @@ body {
   text-shadow: 0 5px 15px rgba(124,92,255,0.4);
 }
 
-.logo:active {
-  transform: scale(0.95);
-}
-
 /* NAV */
 .nav-btn {
   background: transparent;
@@ -60,7 +55,7 @@ body {
   text-align: left;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: 0.2s;
 }
 
 .nav-btn:hover {
@@ -71,7 +66,6 @@ body {
 .nav-btn.active {
   background: #7c5cff;
   color: white;
-  box-shadow: 0 5px 15px rgba(124,92,255,0.3);
 }
 
 /* CONTENT */
@@ -81,26 +75,25 @@ body {
   overflow-y: auto;
 }
 
-/* ANIMATION */
-.fade-out {
-  opacity: 0;
-  transform: translateY(10px);
+/* SEARCH */
+.search-bar {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 2px solid #7c5cff;
+  outline: none;
+  font-size: 14px;
   transition: 0.2s;
 }
 
-.fade-in {
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.search-bar input:focus {
+  box-shadow: 0 0 10px rgba(124,92,255,0.3);
+  transform: scale(1.01);
 }
 
 /* CARD */
@@ -110,7 +103,6 @@ body {
   border-radius: 14px;
   border: 1px solid #e7e3ff;
   margin-bottom: 15px;
-  animation: fadeIn 0.4s ease;
   transition: 0.2s;
 }
 
@@ -125,30 +117,21 @@ body {
   margin-bottom: 10px;
 }
 
-/* ========================= */
-/* AJOUT : SEARCH BAR */
-/* ========================= */
-
-.search-bar {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.search-bar input {
-  width: 100%;
-  padding: 12px 15px;
-  border-radius: 12px;
-  border: 2px solid #7c5cff;
-  outline: none;
+/* ANIMATION */
+.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
   transition: 0.2s;
-  font-size: 14px;
 }
 
-.search-bar input:focus {
-  box-shadow: 0 0 10px rgba(124,92,255,0.3);
-  transform: scale(1.01);
+.fade-in {
+  animation: fadeIn 0.3s ease;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>
 
 </head>
@@ -177,14 +160,23 @@ body {
   <!-- CONTENT -->
   <div class="content" id="content">
 
-    <!-- AJOUT : BARRE DE RECHERCHE -->
     <div class="search-bar">
-      <input type="text" placeholder="Rechercher sur Armigé...">
+      <input type="text" placeholder="Rechercher sur Armigé..." oninput="searchContent(this.value)">
     </div>
 
     <div class="card">
       <div class="title">Accueil</div>
       <div>Bienvenue sur Armigé.</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Actualité</div>
+      <div>Nouvelle mise à jour du réseau.</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Culture</div>
+      <div>Art et création numérique.</div>
     </div>
 
   </div>
@@ -196,7 +188,7 @@ body {
 const buttons = document.querySelectorAll(".nav-btn");
 const content = document.getElementById("content");
 
-/* PAGES */
+/* NAVIGATION */
 const pages = {
   home: "Accueil",
   explore: "Explorer",
@@ -208,7 +200,6 @@ const pages = {
   apps: "Autres Apps"
 };
 
-/* NAVIGATION */
 buttons.forEach(btn => {
   btn.addEventListener("click", () => {
 
@@ -228,12 +219,17 @@ function loadPage(page) {
 
     content.innerHTML = `
       <div class="search-bar">
-        <input type="text" placeholder="Rechercher sur Armigé...">
+        <input type="text" placeholder="Rechercher sur Armigé..." oninput="searchContent(this.value)">
       </div>
 
       <div class="card">
         <div class="title">${pages[page]}</div>
         <div>Contenu de la page ${page}</div>
+      </div>
+
+      <div class="card">
+        <div class="title">Exemple contenu</div>
+        <div>Information liée à ${page}</div>
       </div>
     `;
 
@@ -247,11 +243,30 @@ function loadPage(page) {
   }, 200);
 }
 
-/* LOGO */
+/* LOGO HOME */
 function goHome() {
   buttons.forEach(b => b.classList.remove("active"));
   document.querySelector('[data-page="home"]').classList.add("active");
   loadPage("home");
+}
+
+/* SEARCH FUNCTION */
+function searchContent(query) {
+
+  const cards = document.querySelectorAll(".card");
+  query = query.toLowerCase();
+
+  cards.forEach(card => {
+
+    const text = card.innerText.toLowerCase();
+
+    if (text.includes(query)) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+
+  });
 }
 
 </script>
