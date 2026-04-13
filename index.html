@@ -43,7 +43,6 @@ body {
   transition: 0.2s;
 }
 
-/* EFFET LOGO */
 .logo:hover {
   transform: scale(1.05);
   text-shadow: 0 5px 15px rgba(124,92,255,0.4);
@@ -125,6 +124,31 @@ body {
   color: #7c5cff;
   margin-bottom: 10px;
 }
+
+/* ========================= */
+/* AJOUT : SEARCH BAR */
+/* ========================= */
+
+.search-bar {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 2px solid #7c5cff;
+  outline: none;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.search-bar input:focus {
+  box-shadow: 0 0 10px rgba(124,92,255,0.3);
+  transform: scale(1.01);
+}
+
 </style>
 
 </head>
@@ -152,6 +176,11 @@ body {
 
   <!-- CONTENT -->
   <div class="content" id="content">
+
+    <!-- AJOUT : BARRE DE RECHERCHE -->
+    <div class="search-bar">
+      <input type="text" placeholder="Rechercher sur Armigé...">
+    </div>
 
     <div class="card">
       <div class="title">Accueil</div>
@@ -190,7 +219,7 @@ buttons.forEach(btn => {
   });
 });
 
-/* LOAD PAGE AVEC ANIMATION */
+/* LOAD PAGE */
 function loadPage(page) {
 
   content.classList.add("fade-out");
@@ -198,6 +227,10 @@ function loadPage(page) {
   setTimeout(() => {
 
     content.innerHTML = `
+      <div class="search-bar">
+        <input type="text" placeholder="Rechercher sur Armigé...">
+      </div>
+
       <div class="card">
         <div class="title">${pages[page]}</div>
         <div>Contenu de la page ${page}</div>
@@ -214,13 +247,10 @@ function loadPage(page) {
   }, 200);
 }
 
-/* LOGO = HOME */
+/* LOGO */
 function goHome() {
-
-  /* reset bouton actif */
   buttons.forEach(b => b.classList.remove("active"));
   document.querySelector('[data-page="home"]').classList.add("active");
-
   loadPage("home");
 }
 
