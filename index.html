@@ -16,7 +16,62 @@ body {
   background: #f6f4ff;
 }
 
-/* APP */
+/* =========================
+   LOADER
+========================= */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: #f6f4ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader-box {
+  text-align: center;
+}
+
+.logo-load {
+  font-size: 30px;
+  font-weight: bold;
+  color: #7c5cff;
+  margin-bottom: 10px;
+}
+
+.text-load {
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.bar {
+  width: 200px;
+  height: 6px;
+  background: #e7e3ff;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar::after {
+  content: "";
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background: #7c5cff;
+  animation: load 1s infinite ease-in-out;
+}
+
+@keyframes load {
+  0% { left: -50%; }
+  50% { left: 25%; }
+  100% { left: 100%; }
+}
+
+/* =========================
+   APP
+========================= */
 .app {
   display: flex;
   height: 100vh;
@@ -144,6 +199,15 @@ body {
 
 <body>
 
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-box">
+    <div class="logo-load">Armigé</div>
+    <div class="text-load">Connexion au réseau Franc Suisse...</div>
+    <div class="bar"></div>
+  </div>
+</div>
+
 <div class="app">
 
   <!-- SIDEBAR -->
@@ -195,6 +259,30 @@ const pages = {
   apps: "Autres Apps"
 };
 
+/* =========================
+   LOADER FIX ULTRA FIABLE
+========================= */
+function hideLoader() {
+  const loader = document.getElementById("loader");
+  if (!loader) return;
+
+  loader.style.opacity = "0";
+  loader.style.transition = "0.5s";
+
+  setTimeout(() => {
+    loader.style.display = "none";
+  }, 500);
+}
+
+/* déclenche normal */
+window.addEventListener("load", () => {
+  setTimeout(hideLoader, 800);
+});
+
+/* fallback sécurité */
+setTimeout(hideLoader, 3000);
+
+/* NAV */
 buttons.forEach(btn => {
   btn.addEventListener("click", () => {
 
@@ -249,7 +337,7 @@ function searchContent(query) {
   });
 }
 
-/* PROFILE SYSTEM */
+/* PROFILE */
 function renderProfile(tab = "compte") {
 
   const tabs = {
