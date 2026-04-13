@@ -66,6 +66,7 @@ body {
 .nav-btn.active {
   background: #7c5cff;
   color: white;
+  box-shadow: 0 5px 15px rgba(124,92,255,0.2);
 }
 
 /* CONTENT */
@@ -87,7 +88,6 @@ body {
   border-radius: 12px;
   border: 2px solid #7c5cff;
   outline: none;
-  font-size: 14px;
   transition: 0.2s;
 }
 
@@ -117,20 +117,26 @@ body {
   margin-bottom: 10px;
 }
 
-/* ANIMATION */
-.fade-out {
-  opacity: 0;
-  transform: translateY(10px);
+/* PROFILE */
+.profile-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.tab-btn {
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #f0ecff;
   transition: 0.2s;
 }
 
-.fade-in {
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+.tab-btn.active {
+  background: #7c5cff;
+  color: white;
 }
 </style>
 
@@ -169,16 +175,6 @@ body {
       <div>Bienvenue sur Armigé.</div>
     </div>
 
-    <div class="card">
-      <div class="title">Actualité</div>
-      <div>Nouvelle mise à jour du réseau.</div>
-    </div>
-
-    <div class="card">
-      <div class="title">Culture</div>
-      <div>Art et création numérique.</div>
-    </div>
-
   </div>
 
 </div>
@@ -188,7 +184,6 @@ body {
 const buttons = document.querySelectorAll(".nav-btn");
 const content = document.getElementById("content");
 
-/* NAVIGATION */
 const pages = {
   home: "Accueil",
   explore: "Explorer",
@@ -213,60 +208,81 @@ buttons.forEach(btn => {
 /* LOAD PAGE */
 function loadPage(page) {
 
-  content.classList.add("fade-out");
+  if (page === "profile") {
+    renderProfile();
+    return;
+  }
 
-  setTimeout(() => {
+  content.innerHTML = `
+    <div class="search-bar">
+      <input type="text" placeholder="Rechercher sur Armigé..." oninput="searchContent(this.value)">
+    </div>
 
-    content.innerHTML = `
-      <div class="search-bar">
-        <input type="text" placeholder="Rechercher sur Armigé..." oninput="searchContent(this.value)">
+    <div class="card">
+      <div class="title">${pages[page]}</div>
+      <div>
+        Désolé, cet espace est indisponible. Veuillez réessayer prochainement.
       </div>
-
-      <div class="card">
-        <div class="title">${pages[page]}</div>
-        <div>Contenu de la page ${page}</div>
+      <br>
+      <div style="color:#7c5cff; font-weight:bold;">
+        - Franc Suisse -
       </div>
-
-      <div class="card">
-        <div class="title">Exemple contenu</div>
-        <div>Information liée à ${page}</div>
-      </div>
-    `;
-
-    content.classList.remove("fade-out");
-    content.classList.add("fade-in");
-
-    setTimeout(() => {
-      content.classList.remove("fade-in");
-    }, 300);
-
-  }, 200);
+    </div>
+  `;
 }
 
-/* LOGO HOME */
+/* HOME */
 function goHome() {
   buttons.forEach(b => b.classList.remove("active"));
   document.querySelector('[data-page="home"]').classList.add("active");
   loadPage("home");
 }
 
-/* SEARCH FUNCTION */
+/* SEARCH */
 function searchContent(query) {
-
   const cards = document.querySelectorAll(".card");
   query = query.toLowerCase();
 
   cards.forEach(card => {
-
-    const text = card.innerText.toLowerCase();
-
-    if (text.includes(query)) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
-
+    card.style.display =
+      card.innerText.toLowerCase().includes(query) ? "block" : "none";
   });
+}
+
+/* PROFILE SYSTEM */
+function renderProfile(tab = "compte") {
+
+  const tabs = {
+    compte: "Gestion du compte utilisateur.",
+    publications: "Vos publications apparaîtront ici.",
+    historique: "Historique de navigation.",
+    contacts: "Liste de contacts.",
+    preferences: "Paramètres et préférences.",
+    abonnements: "Chaînes et créateurs suivis."
+  };
+
+  content.innerHTML = `
+    <div class="card">
+      <div class="title">Profil</div>
+
+      <div class="profile-tabs">
+
+        <button class="tab-btn" onclick="renderProfile('compte')">Compte</button>
+        <button class="tab-btn" onclick="renderProfile('publications')">Publications</button>
+        <button class="tab-btn" onclick="renderProfile('historique')">Historique</button>
+        <button class="tab-btn" onclick="renderProfile('contacts')">Contacts</button>
+        <button class="tab-btn" onclick="renderProfile('preferences')">Préférences</button>
+        <button class="tab-btn" onclick="renderProfile('abonnements')">Abonnements</button>
+
+      </div>
+
+      <div class="card">
+        <div class="title">${tab}</div>
+        <div>${tabs[tab]}</div>
+      </div>
+
+    </div>
+  `;
 }
 
 </script>
