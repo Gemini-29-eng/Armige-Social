@@ -192,33 +192,74 @@ body {
 }
 
 /* PROFILE */
-.profile-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 15px;
+.profile-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.card {
-  background: white;
-  padding: 18px;
-  border-radius: 14px;
-  border: 1px solid #e7e3ff;
-  transition: 0.25s;
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #ddd;
 }
 
-/* HOVER */
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(124,92,255,0.18);
+.profile-info h2 {
+  margin-bottom: 5px;
 }
 
-.input {
+.bio-input {
   width: 100%;
   padding: 8px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  margin-top: 5px;
 }
 
+.stats {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #666;
+}
+
+.tab.active {
+  color: #7c5cff;
+  border-bottom: 2px solid #7c5cff;
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.post {
+  height: 120px;
+  background: #eee;
+  border-radius: 12px;
+  animation: cardIn 0.3s ease;
+}
+
+/* BUTTON */
 .save-btn {
   margin-top: 10px;
   padding: 10px;
@@ -230,8 +271,20 @@ body {
 }
 
 /* NON DEV */
+.card {
+  background: white;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #e7e3ff;
+  transition: 0.25s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(124,92,255,0.18);
+}
+
 .not-developed {
-  font-size: 14px;
   color: #555;
 }
 
@@ -293,7 +346,7 @@ buttons.forEach(btn => {
   });
 });
 
-/* ACCUEIL */
+/* HOME */
 function renderHome() {
   content.innerHTML = `
     <div class="search-bar">
@@ -328,39 +381,67 @@ function renderHome() {
   `;
 }
 
-/* PROFILE */
+/* PROFILE INSTAGRAM */
 function renderProfile() {
 
-  const name = localStorage.getItem("armige_name") || "Invité";
-  const lang = localStorage.getItem("armige_lang") || "Français";
+  let name = localStorage.getItem("armige_name") || "Utilisateur";
+  let bio = localStorage.getItem("armige_bio") || "Aucune bio";
+  let posts = JSON.parse(localStorage.getItem("armige_posts") || "[]");
 
   content.innerHTML = `
-    <div class="card">
-      <div class="title">Compte</div>
+    <div class="profile-header">
+      <div class="avatar"></div>
 
-      Nom :
-      <input class="input" id="nameInput" value="${name}"><br><br>
+      <div class="profile-info">
+        <h2>${name}</h2>
 
-      Langue :
-      <input class="input" id="langInput" value="${lang}"><br><br>
+        <input class="bio-input" id="bioInput" value="${bio}">
 
-      <button class="save-btn" onclick="saveProfile()">Enregistrer</button>
+        <div class="stats">
+          <div><b>${posts.length}</b> posts</div>
+          <div><b>0</b> abonnés</div>
+          <div><b>0</b> abonnements</div>
+        </div>
+      </div>
     </div>
 
-    <div class="profile-grid">
-      <div class="card"><div class="title">Historique</div><div>Aucune activité.</div></div>
-      <div class="card"><div class="title">Publications</div><div>Aucune publication.</div></div>
-      <div class="card"><div class="title">Contacts</div><div>Aucun contact.</div></div>
-      <div class="card"><div class="title">Préférences</div><div>Paramètres utilisateur</div></div>
-      <div class="card"><div class="title">Abonnements</div><div>Aucun abonnement</div></div>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('posts')">Publications</div>
+      <div class="tab" onclick="switchTab('info')">Infos</div>
+      <div class="tab" onclick="switchTab('settings')">Paramètres</div>
     </div>
+
+    <div id="profileContent">
+      <div class="post-grid">
+        ${posts.map(() => `<div class="post"></div>`).join("")}
+      </div>
+    </div>
+
+    <button class="save-btn" onclick="saveProfile()">Sauvegarder</button>
   `;
 }
 
 function saveProfile() {
-  localStorage.setItem("armige_name", document.getElementById("nameInput").value);
-  localStorage.setItem("armige_lang", document.getElementById("langInput").value);
-  alert("Profil mis à jour !");
+  localStorage.setItem("armige_bio", document.getElementById("bioInput").value);
+  alert("Profil sauvegardé !");
+}
+
+function switchTab(tab) {
+
+  const container = document.getElementById("profileContent");
+
+  if (tab === "posts") {
+    let posts = JSON.parse(localStorage.getItem("armige_posts") || "[]");
+    container.innerHTML = `<div class="post-grid">${posts.map(() => `<div class="post"></div>`).join("")}</div>`;
+  }
+
+  if (tab === "info") {
+    container.innerHTML = `<div class="card">Profil utilisateur Armigé</div>`;
+  }
+
+  if (tab === "settings") {
+    container.innerHTML = `<div class="card">Paramètres du compte</div>`;
+  }
 }
 
 /* ROUTER */
@@ -380,13 +461,10 @@ function loadPage(page) {
   `;
 }
 
-/* ✅ FIX LOGO */
+/* FIX LOGO */
 function goHome() {
 
-  document.querySelectorAll(".nav-btn").forEach(b => {
-    b.classList.remove("active");
-  });
-
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
   document.querySelector('[data-page="home"]').classList.add("active");
 
   loadPage("home");
