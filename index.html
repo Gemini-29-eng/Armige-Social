@@ -203,6 +203,13 @@ body {
   padding: 18px;
   border-radius: 14px;
   border: 1px solid #e7e3ff;
+  transition: 0.25s;
+}
+
+/* HOVER */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(124,92,255,0.18);
 }
 
 .input {
@@ -329,7 +336,7 @@ function renderProfile() {
 
   content.innerHTML = `
     <div class="card">
-      <div class="title">Profil</div>
+      <div class="title">Compte</div>
 
       Nom :
       <input class="input" id="nameInput" value="${name}"><br><br>
@@ -341,11 +348,11 @@ function renderProfile() {
     </div>
 
     <div class="profile-grid">
-      <div class="card"><div class="title">Historique</div></div>
-      <div class="card"><div class="title">Publications</div></div>
-      <div class="card"><div class="title">Contacts</div></div>
-      <div class="card"><div class="title">Préférences</div></div>
-      <div class="card"><div class="title">Abonnements</div></div>
+      <div class="card"><div class="title">Historique</div><div>Aucune activité.</div></div>
+      <div class="card"><div class="title">Publications</div><div>Aucune publication.</div></div>
+      <div class="card"><div class="title">Contacts</div><div>Aucun contact.</div></div>
+      <div class="card"><div class="title">Préférences</div><div>Paramètres utilisateur</div></div>
+      <div class="card"><div class="title">Abonnements</div><div>Aucun abonnement</div></div>
     </div>
   `;
 }
@@ -373,7 +380,15 @@ function loadPage(page) {
   `;
 }
 
+/* ✅ FIX LOGO */
 function goHome() {
+
+  document.querySelectorAll(".nav-btn").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  document.querySelector('[data-page="home"]').classList.add("active");
+
   loadPage("home");
 }
 
