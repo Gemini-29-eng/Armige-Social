@@ -14,13 +14,28 @@
 
 body {
   background: #f6f4ff;
-  animation: fadePage 0.4s ease;
+  animation: pageIn 0.35s ease;
 }
 
-/* PAGE FADE */
-@keyframes fadePage {
+/* ANIMATIONS */
+@keyframes pageIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.05); }
+}
+
+@keyframes load {
+  0% { left: -50%; }
+  50% { left: 25%; }
+  100% { left: 100%; }
 }
 
 /* LOADER */
@@ -32,7 +47,6 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  transition: opacity 0.4s ease;
 }
 
 .loader-box {
@@ -44,11 +58,6 @@ body {
   font-weight: bold;
   color: #7c5cff;
   animation: pulse 1.5s infinite;
-}
-
-.text-load {
-  margin-top: 10px;
-  color: #555;
 }
 
 .bar {
@@ -70,26 +79,12 @@ body {
   animation: load 1s infinite;
 }
 
-/* ANIMATIONS */
-@keyframes load {
-  0% { left: -50%; }
-  50% { left: 25%; }
-  100% { left: 100%; }
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.06); }
-  100% { transform: scale(1); }
-}
-
-/* APP */
+/* LAYOUT */
 .app {
   display: flex;
   height: 100vh;
 }
 
-/* SIDEBAR */
 .sidebar {
   width: 240px;
   background: white;
@@ -100,7 +95,6 @@ body {
   gap: 10px;
 }
 
-/* LOGO */
 .logo {
   font-size: 22px;
   font-weight: bold;
@@ -113,7 +107,6 @@ body {
   transform: scale(1.05);
 }
 
-/* NAV */
 .nav-btn {
   padding: 12px;
   border: none;
@@ -141,68 +134,84 @@ body {
   overflow-y: auto;
 }
 
-/* CARD */
-.card {
-  background: white;
-  padding: 18px;
+/* SEARCH */
+.search-bar input {
+  width: 100%;
+  padding: 12px;
   border-radius: 14px;
-  border: 1px solid #e7e3ff;
-  margin-bottom: 15px;
-  animation: cardIn 0.3s ease;
-  transition: 0.2s;
+  border: 2px solid #7c5cff;
+  margin-bottom: 25px;
 }
 
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(124,92,255,0.15);
-}
-
-/* CARD ANIM */
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* TITLE */
+/* TITLES */
 .title {
   font-weight: bold;
   color: #7c5cff;
   margin-bottom: 10px;
 }
 
-/* SEARCH */
-.search-bar input {
+/* ARTICLES */
+.article-line {
+  padding: 15px 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  animation: cardIn 0.3s ease;
+}
+
+.article-line:hover {
+  background: #f4f1ff;
+}
+
+/* RECO */
+.reco-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.video {
+  cursor: pointer;
+  animation: cardIn 0.3s ease;
+}
+
+.thumbnail {
   width: 100%;
-  padding: 12px;
+  height: 150px;
+  background: #ddd;
   border-radius: 12px;
-  border: 2px solid #7c5cff;
-  margin-bottom: 20px;
   transition: 0.2s;
 }
 
-.search-bar input:focus {
-  outline: none;
-  transform: scale(1.01);
-  box-shadow: 0 0 10px rgba(124,92,255,0.25);
+.video:hover .thumbnail {
+  transform: scale(1.03);
 }
 
-/* GRID */
+.video-title {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+/* PROFILE */
 .profile-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 15px;
 }
 
-/* INPUT */
+.card {
+  background: white;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #e7e3ff;
+}
+
 .input {
   width: 100%;
   padding: 8px;
-  margin-top: 6px;
   border-radius: 8px;
   border: 1px solid #ccc;
 }
 
-/* BUTTON */
 .save-btn {
   margin-top: 10px;
   padding: 10px;
@@ -213,11 +222,10 @@ body {
   cursor: pointer;
 }
 
-/* NON DEVELOPPE */
+/* NON DEV */
 .not-developed {
   font-size: 14px;
   color: #555;
-  line-height: 1.6;
 }
 
 .franc {
@@ -226,54 +234,45 @@ body {
 }
 
 </style>
-
 </head>
 
 <body>
 
-<!-- LOADER -->
 <div id="loader">
   <div class="loader-box">
     <div class="logo-load">Armigé</div>
-    <div class="text-load">Chargement du réseau...</div>
     <div class="bar"></div>
   </div>
 </div>
 
 <div class="app">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="logo" onclick="goHome()">Armigé</div>
+<div class="sidebar">
+  <div class="logo" onclick="goHome()">Armigé</div>
 
-    <button class="nav-btn active" data-page="home">Accueil</button>
-    <button class="nav-btn" data-page="explore">Explorer</button>
-    <button class="nav-btn" data-page="messages">Messages</button>
-    <button class="nav-btn" data-page="profile">Profil</button>
+  <button class="nav-btn active" data-page="home">Accueil</button>
+  <button class="nav-btn" data-page="explore">Explorer</button>
+  <button class="nav-btn" data-page="messages">Messages</button>
+  <button class="nav-btn" data-page="profile">Profil</button>
 
-    <hr>
+  <hr>
 
-    <button class="nav-btn" data-page="actualites">Actualités</button>
-    <button class="nav-btn" data-page="culture">Culture</button>
-    <button class="nav-btn" data-page="divertissement">Divertissement</button>
-    <button class="nav-btn" data-page="apps">Autres Apps</button>
-  </div>
+  <button class="nav-btn" data-page="actualites">Actualités</button>
+  <button class="nav-btn" data-page="culture">Culture</button>
+  <button class="nav-btn" data-page="divertissement">Divertissement</button>
+  <button class="nav-btn" data-page="apps">Autres Apps</button>
+</div>
 
-  <!-- CONTENT -->
-  <div class="content" id="content"></div>
+<div class="content" id="content"></div>
 
 </div>
 
 <script>
 
-/* LOADER SAFE */
-function hideLoader() {
-  const loader = document.getElementById("loader");
-  if (!loader) return;
-  loader.style.opacity = "0";
-  setTimeout(() => loader.style.display = "none", 300);
-}
-setTimeout(hideLoader, 1000);
+/* LOADER */
+setTimeout(() => {
+  document.getElementById("loader").style.display = "none";
+}, 900);
 
 /* NAV */
 const buttons = document.querySelectorAll(".nav-btn");
@@ -287,21 +286,83 @@ buttons.forEach(btn => {
   });
 });
 
-/* LOAD */
-function loadPage(page) {
-
-  if (page === "profile") {
-    renderProfile();
-    return;
-  }
-
+/* ACCUEIL */
+function renderHome() {
   content.innerHTML = `
     <div class="search-bar">
-      <input type="text" placeholder="Rechercher sur Armigé...">
+      <input placeholder="Recherche...">
     </div>
 
+    <div class="title">Articles</div>
+
+    <div class="article-line">
+      <b>Titre d'article 1</b><br>
+      Résumé de contenu rédigé sur la plateforme.
+    </div>
+
+    <div class="article-line">
+      <b>Titre d'article 2</b><br>
+      Analyse, culture et information.
+    </div>
+
+    <div class="title" style="margin-top:30px;">Recommandations</div>
+
+    <div class="reco-grid">
+      <div class="video">
+        <div class="thumbnail"></div>
+        <div class="video-title">Vidéo 1</div>
+      </div>
+
+      <div class="video">
+        <div class="thumbnail"></div>
+        <div class="video-title">Vidéo 2</div>
+      </div>
+    </div>
+  `;
+}
+
+/* PROFILE */
+function renderProfile() {
+
+  const name = localStorage.getItem("armige_name") || "Invité";
+  const lang = localStorage.getItem("armige_lang") || "Français";
+
+  content.innerHTML = `
     <div class="card">
-      <div class="title">${page}</div>
+      <div class="title">Profil</div>
+
+      Nom :
+      <input class="input" id="nameInput" value="${name}"><br><br>
+
+      Langue :
+      <input class="input" id="langInput" value="${lang}"><br><br>
+
+      <button class="save-btn" onclick="saveProfile()">Enregistrer</button>
+    </div>
+
+    <div class="profile-grid">
+      <div class="card"><div class="title">Historique</div></div>
+      <div class="card"><div class="title">Publications</div></div>
+      <div class="card"><div class="title">Contacts</div></div>
+      <div class="card"><div class="title">Préférences</div></div>
+      <div class="card"><div class="title">Abonnements</div></div>
+    </div>
+  `;
+}
+
+function saveProfile() {
+  localStorage.setItem("armige_name", document.getElementById("nameInput").value);
+  localStorage.setItem("armige_lang", document.getElementById("langInput").value);
+  alert("Profil mis à jour !");
+}
+
+/* ROUTER */
+function loadPage(page) {
+  if (page === "home") return renderHome();
+  if (page === "profile") return renderProfile();
+
+  content.innerHTML = `
+    <div class="card">
       <div class="not-developed">
         *Page non-développée*<br><br>
         Désolé, mais cette page n'est pas développée.<br>
@@ -312,49 +373,11 @@ function loadPage(page) {
   `;
 }
 
-/* HOME */
 function goHome() {
   loadPage("home");
 }
 
-/* PROFILE */
-function renderProfile() {
-
-  const name = localStorage.getItem("armige_name") || "Invité";
-  const lang = localStorage.getItem("armige_lang") || "Français";
-
-  content.innerHTML = `
-
-    <div class="card">
-      <div class="title">Compte</div>
-
-      Nom :
-      <input class="input" id="nameInput" value="${name}"><br>
-
-      Langue :
-      <input class="input" id="langInput" value="${lang}"><br>
-
-      <button class="save-btn" onclick="saveProfile()">Enregistrer</button>
-    </div>
-
-    <div class="profile-grid">
-
-      <div class="card"><div class="title">Historique</div><div>Aucune activité.</div></div>
-      <div class="card"><div class="title">Publications</div><div>Aucune publication.</div></div>
-      <div class="card"><div class="title">Contacts</div><div>Aucun contact.</div></div>
-      <div class="card"><div class="title">Préférences</div><div>Paramètres utilisateur</div></div>
-      <div class="card"><div class="title">Abonnements</div><div>Aucun abonnement</div></div>
-
-    </div>
-  `;
-}
-
-/* SAVE */
-function saveProfile() {
-  localStorage.setItem("armige_name", document.getElementById("nameInput").value);
-  localStorage.setItem("armige_lang", document.getElementById("langInput").value);
-  alert("Profil mis à jour !");
-}
+loadPage("home");
 
 </script>
 
